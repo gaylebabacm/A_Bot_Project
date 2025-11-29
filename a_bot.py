@@ -13,7 +13,7 @@ def home():
 # ------------------  TELEGRAM BOT  ------------------
 API_ID = 38934704
 API_HASH = "77bf14764bacdbf309aa0d1d786d97d7"
-BOT_TOKEN = os.getenv("BOT_TOKEN")  # 🔒 Token yahan se lega
+BOT_TOKEN = os.getenv("BOT_TOKEN")   # <== ENV VARIABLE SE TOKEN LO
 
 bot = Client(
     "A_BOT",
@@ -28,6 +28,6 @@ async def start_handler(client, message):
 
 # ------------------  RUN BOTH  ------------------
 if __name__ == "__main__":
-    bot.start()  # Telegram Bot Start
+    bot.start()
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
