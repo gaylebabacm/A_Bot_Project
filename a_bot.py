@@ -1,20 +1,18 @@
 from flask import Flask
 from pyrogram import Client, filters
-import threading
 import os
 
-# ------------- FLASK SERVER -------------
+# FLASK SERVER
 app = Flask(__name__)
 
-@app.route('/')
+@app.route("/")
 def home():
     return "Bot is running! 🚀"
 
-
-# ------------- TELEGRAM BOT CONFIG -------------
+# TELEGRAM BOT CONFIG
 API_ID = 38934704
 API_HASH = "77bf14764bacdbf309aa0d1d786d97d7"
-BOT_TOKEN = os.getenv("BOT_TOKEN")  # Environment Variable se token le raha hai
+BOT_TOKEN = os.getenv("BOT_TOKEN")  # Environment se token le raha hai
 
 bot = Client(
     "A_BOT",
@@ -27,15 +25,13 @@ bot = Client(
 async def start_handler(client, message):
     await message.reply("A Bot Online Hai 🔥")
 
-# ------------- BOT RUN KARNE KA FUNCTION -------------
-def start_bot():
-    bot.run()       # <-- ye background thread me chalega
-
-# ------------- MAIN RUN -------------
+# RUN BOT & FLASK TOGETHER
 if __name__ == "__main__":
-    # Telegram Bot Background me start
-    threading.Thread(target=start_bot).start()
-
-    # Flask Server Render ke liye run
+    bot.start()  # Telegram bot start
+    print("Telegram Bot Started Successfully ✔️")
+    
+    # Flask run Render ke liye
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+    
+    bot.idle()  # Bot ko background me alive rakhega
