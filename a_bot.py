@@ -1,33 +1,34 @@
-from aiogram import Bot, Dispatcher, types
-from aiogram.utils import executor
+import asyncio
 from flask import Flask
+from aiogram import Bot, Dispatcher, types
 import os
 
-# ---------------- FLASK SERVER ----------------
-app = Flask(name)
+# --------- FLASK SERVER ---------
+app = Flask(__name__)
 
-@app.route("/")
+@app.route('/')
 def home():
-    return "Bot is running! 🚀"
+    return "Bot is running with Aiogram v3! 🚀"
 
-# ---------------- TELEGRAM BOT ----------------
-BOT_TOKEN = os.getenv("BOT_TOKEN")  # Environment se le raha
+# --------- TELEGRAM BOT CONFIG ---------
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 bot = Bot(token=BOT_TOKEN)
-dp = Dispatcher(bot)
+dp = Dispatcher()
 
-@dp.message_handler(commands=['start'])
-async def start(msg: types.Message):
-    await msg.answer("A Bot Online Hai 🔥")
+# --------- COMMAND HANDLER ---------
+@dp.message(commands=["start"])
+async def start_handler(message: types.Message):
+    await message.answer("A Bot Online Hai 🔥 (Aiogram v3)")
 
-# ---------------- RUNNING ----------------
-if name == "main":
-    # Telegram Bot Start
-    from threading import Thread
-    def start_bot():
-        executor.start_polling(dp, skip_updates=True)
+# --------- RUN BOTH ---------
+async def run_bot():
+    await dp.start_polling(bot)
 
-    Thread(target=start_bot).start()
+if __name__ == "__main__":
+    # Telegram Bot BACKGROUND me chalana
+    loop = asyncio.get_event_loop()
+    loop.create_task(run_bot())
 
-    # Flask Server Render ke liye
+    # Flask server RUN render ke liye
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
