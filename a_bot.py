@@ -13,7 +13,7 @@ def home():
 # ------------------  TELEGRAM BOT  ------------------
 API_ID = 38934704
 API_HASH = "77bf14764bacdbf309aa0d1d786d97d7"
-BOT_TOKEN = "8111461693:AAHe2REuiSfjCVquVa3h4F2TVfG4m-kRSBo"
+BOT_TOKEN = "8111461693:AAFseEk-xnmnXizPYd9fJKl9W4yoyfMqYS0"   # NEW TOKEN 👈
 
 bot = Client(
     "A_BOT",
