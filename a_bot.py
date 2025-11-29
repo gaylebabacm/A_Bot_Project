@@ -1,8 +1,19 @@
+# ------------------  IMPORTS  ------------------
+from flask import Flask
 from pyrogram import Client, filters
+import os
 
+# ------------------  FLASK SERVER  ------------------
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Bot is running! 🚀"
+
+# ------------------  TELEGRAM BOT  ------------------
 API_ID = 38934704
 API_HASH = "77bf14764bacdbf309aa0d1d786d97d7"
-BOT_TOKEN = "YOUR_BOT_TOKEN_HERE"
+BOT_TOKEN = "8111461693:AAHe2REuiSfjCVquVa3h4F2TVfG4m-kRSBo"
 
 bot = Client(
     "A_BOT",
@@ -15,5 +26,8 @@ bot = Client(
 async def start_handler(client, message):
     await message.reply("A Bot Online Hai 🔥")
 
+# ------------------  RUN BOTH  ------------------
 if __name__ == "__main__":
-    bot.run()
+    bot.start()  # Telegram Bot Start
+    port = int(os.environ.get("PORT", 5000))  # Render ke liye Auto Port
+    app.run(host='0.0.0.0', port=port)  # Flask Server Start
