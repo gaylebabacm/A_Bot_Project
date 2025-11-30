@@ -1,31 +1,34 @@
-import os
-import asyncio
 from flask import Flask
-from aiogram import Bot, Dispatcher, types
-from aiogram.filters import Command
+from pyrogram import Client, filters
+import os
 
-# ---------- Flask Server ----------
+# Flask Server
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Bot is running properly! 🚀"
+    return "Worker Running Successfully! 🔥"
 
-# ---------- Telegram Bot ----------
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+# Telegram Bot Credentials from Environment Variables
+API_ID = int(os.environ.get("API_ID"))
+API_HASH = os.environ.get("API_HASH")
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
 
-async def main():
-    bot = Bot(token=BOT_TOKEN)
-    dp = Dispatcher()
+# Telegram Bot Client
+bot = Client(
+    "A_BOT",
+    api_id=API_ID,
+    api_hash=API_HASH,
+    bot_token=BOT_TOKEN
+)
 
-    @dp.message(Command("start"))
-    async def start_handler(message: types.Message):
-        await message.answer("A Bot Online Hai 🔥 (Aiogram v3 READY!)")
+# START Command
+@bot.on_message(filters.command("start"))
+async def start_handler(client, message):
+    await message.reply("[ Send bot api token ]")
 
-    print("Polling started 🚀")
-    await dp.start_polling(bot)
-
-# ---------- START EVERYTHING ----------
+# Run Both
 if __name__ == "__main__":
-    # Start Telegram Bot
-    asyncio.run(main())
+    bot.start()
+    print("Telegram Bot Started Successfully ✔️")
+    app.run(host='0.0.0.0', port=10000)
