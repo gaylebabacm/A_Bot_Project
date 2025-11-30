@@ -1,6 +1,6 @@
 # ------------------ IMPORTS ------------------
 from flask import Flask
-from pyrogram import Client, filters
+from pyrogram import Client, filters, idle
 import os
 import asyncio
 
@@ -14,7 +14,7 @@ def home():
 # ------------------ TELEGRAM BOT ------------------
 API_ID = 38934704
 API_HASH = "77bf14764bacdbf309aa0d1d786d97d7"
-BOT_TOKEN = os.getenv("BOT_TOKEN")  # Environment Variable se token
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 bot = Client(
     "A_BOT",
@@ -28,11 +28,11 @@ bot = Client(
 async def start_handler(client, message):
     await message.reply("📨 Send Bot API Token")
 
-# ----------- MAIN RUN FUNCTION -----------
+# ----------- BOT RUN FUNCTION -----------
 async def main():
-    await bot.start()      # <-- Start bot
+    await bot.start()
     print("Telegram Bot Started Successfully ✔️")
-    await idle()           # <-- Running idle state for bot
+    await idle()     # <-- IMPORTANT FIX!
 
 # ------------------ RUN BOTH ------------------
 if __name__ == "__main__":
@@ -40,5 +40,5 @@ if __name__ == "__main__":
     from threading import Thread
     Thread(target=lambda: app.run(host="0.0.0.0", port=int(os.getenv("PORT", 10000)))).start()
 
-    # Asyncio bot run
+    # Async Telegram Bot
     asyncio.run(main())
