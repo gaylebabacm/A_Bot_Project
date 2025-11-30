@@ -3,18 +3,19 @@ from flask import Flask
 from pyrogram import Client, filters, idle
 import os
 import asyncio
+from threading import Thread
 
 # ------------------ FLASK SERVER ------------------
 app = Flask(__name__)
 
-@app.route('/')
+@app.route("/")
 def home():
-    return "A Bot Is Running 🚀"
+    return "A Bot is Running 🚀"
 
-# ------------------ TELEGRAM BOT ------------------
+# ------------------ TELEGRAM BOT SETUP ------------------
 API_ID = 38934704
 API_HASH = "77bf14764bacdbf309aa0d1d786d97d7"
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+BOT_TOKEN = os.getenv("BOT_TOKEN")  # Render env se lega
 
 bot = Client(
     "A_BOT",
@@ -23,22 +24,24 @@ bot = Client(
     bot_token=BOT_TOKEN
 )
 
-# ----------- START COMMAND -----------
 @bot.on_message(filters.command("start"))
 async def start_handler(client, message):
     await message.reply("📨 Send Bot API Token")
 
-# ----------- BOT RUN FUNCTION -----------
-async def main():
+# ------------------ BOT START FUNCTION ------------------
+async def run_bot():
     await bot.start()
-    print("Telegram Bot Started Successfully ✔️")
-    await idle()     # <-- IMPORTANT FIX!
+    print("Bot Started ✔️")
+    await idle()
 
-# ------------------ RUN BOTH ------------------
+def start_flask():
+    port = int(os.getenv("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
+
+# ------------------ RUN ------------------
 if __name__ == "__main__":
-    # Flask ko background me chalao
-    from threading import Thread
-    Thread(target=lambda: app.run(host="0.0.0.0", port=int(os.getenv("PORT", 10000)))).start()
+    # Flask alag thread me
+    Thread(target=start_flask).start()
 
-    # Async Telegram Bot
-    asyncio.run(main())
+    # Bot main thread me
+    asyncio.run(run_bot())
